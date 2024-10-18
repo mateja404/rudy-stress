@@ -1,0 +1,6 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    balance DECIMAL(10, 2) DEFAULT 0.00
+);

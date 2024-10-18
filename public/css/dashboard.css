@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap');
+
+* {
+    font-family: "Afacad Flux", sans-serif;
+}
+
+body {
+    background: #0e1323;
+}
+
+header {
+    display: flex;
+    width: 100vw;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(60deg, #0a0e19, #0a0e19, #090e18, #090e18);
+    align-items: center;
+    justify-content: center;
+}
+
+header ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header ul li {
+    display: inline;
+    font-size: 1.3rem;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+header ul li a {
+    color: rgba(255,255,255,.5);
+    text-decoration: none;
+    transition: .2s;
+}
+
+header ul li a i {
+    transform: translateY(2px);
+}
+
+header ul li a:hover {
+    color: #fff;
+    transition: .2s;
+}
+
+.active {
+    color: #fff !important;
+}
+
+.total-data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(110%);
+    gap: 20px;
+}
+
+.total-users {
+    width: 300px;
+    height: 120px;
+    background-color: #38445b;
+}.total-attacks {
+    width: 300px;
+    height: 120px;
+    background-color: #38445b;
+}.total-servers {
+    width: 300px;
+    height: 120px;
+    background-color: #38445b;
+}

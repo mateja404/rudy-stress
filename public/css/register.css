@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap');
+
+* {
+    font-family: "Afacad Flux", sans-serif;
+}
+
+body {
+    background: linear-gradient(60deg, #0a0e19, #0a0e19, #090e18, #090e18);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.register-container {
+    width: 350px;
+    color: black;
+    border-radius: 10px;
+    padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.2px);
+    -webkit-backdrop-filter: blur(7.2px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.register-container h1 {
+    font-size: 2rem;
+    text-align: center;
+    color: white;
+}
+
+.register-container a {
+    justify-content: center;
+    color: white;
+    display: flex;
+    margin-right: 5px;
+    text-decoration: none;
+    margin-top: -20px;
+}
+
+.register-container span {
+    margin-left: 5px;
+    text-decoration: underline;
+}
+
+.register-container .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.input-box label {
+    position: absolute;
+    top: -20px;
+    left: 1px;
+    color: white;
+}
+
+.input-box input {
+    width: 100%;
+    background-color: #090e18;
+    outline: none;
+    border: transparent;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-indent: 20px;
+    color: white;
+    transition: .15s;
+}
+
+.input-box input::placeholder {
+    color: #38445b;
+    margin-left: 20px;
+}
+
+.input-box input:focus {
+    border: 1px solid orange;
+    transition: .15s;
+    outline: none;
+}
+
+.register-container button {
+    width: 100%;
+    background-color: orange;
+    color: white;
+    border-radius: 4px;
+    height: 45px;
+    border: 2px solid orange;
+    transition: .4s;
+    font-size: 1.1rem;
+}
+
+.register-container button:hover {
+    cursor: pointer;
+    border: 2px solid orange;
+    background-color: transparent;
+    transition: .4s;
+}
+
+.swal2-popup.swal2-modal.swal2-icon-success.swal2-show {
+    background: #422e47;
+}
+
+.swal2-success-circular-line-right, .swal2-success-circular-line-left, .swal2-success-fix{
+    display: none;
+}
+
+.swal2-icon, .swal2-icon-show {
+    background: transparent;
+}
+
+.swal2-success-ring, .swal2-x-mark {
+    background: transparent;
+    background-color: transparent;
+}
+
+.swal2-icon-error, .swal2-success, .swal2-title, .swal2-html-container, .swal2-icon{
+    background-color: white;
+    background: #422e47;
+    color: white !important;
+}
+
+.swal2-success-fix {
+    background: transparent;
+}
+
+.swal2-popup.swal2-modal.swal2-icon-info.swal2-show {
+    background: #422e47;
+}
+
+.swal2-info-circular-line-right, .swal2-info-circular-line-left, .swal2-info-fix {
+    display: none;
+}
+
+.swal2-icon, .swal2-icon-show {
+    background: transparent;
+}
+
+.swal2-info-ring, .swal2-x-mark {
+    background: transparent;
+    background-color: transparent;
+}
+
+.swal2-icon-error, .swal2-info, .swal2-title, .swal2-html-container, .swal2-icon {
+    background-color: white;
+    background: #422e47;
+    color: white !important;
+}
+
+.swal2-info-fix {
+    background: transparent;
+}
+
+.swal2-actions {
+    background: transparent;
+    background-color: transparent;
+}
