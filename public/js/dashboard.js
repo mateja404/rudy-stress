@@ -1,3 +1,5 @@
+// chart.js
+
 let chartInstance;
 
 function fetchAndUpdateChart() {
@@ -49,4 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ukloni setInterval ako ne želiš osvežavanje
     // setInterval(fetchAndUpdateChart, 5 * 60 * 1000); // Refresh every 5 minutes
     console.log("lalala")
+});
+
+// sidebar
+
+const menuButton = document.querySelector(".menu-btn");
+const sidebar = document.querySelector(".sidebar");
+
+menuButton.addEventListener("click", function() {
+    sidebar.classList.toggle("active-sidebar");
 });

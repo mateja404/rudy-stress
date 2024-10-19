@@ -41,6 +41,14 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
+app.get('/panel', (req, res) => {
+    if (req.session.logged) {
+        res.render('panel');
+    } else {
+        res.redirect('/login');
+    }
+});
+
 app.post('/register', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
