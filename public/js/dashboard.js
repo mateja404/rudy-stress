@@ -4,7 +4,7 @@ let chartInstance;
 
 function fetchAndUpdateChart() {
     // Staticki podaci
-    const labels = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+    const labels = ['DNS', 'CLOUDFLARE', 'COOKIES', 'TCP-BYPASS', 'TCP-SYN'];
     const counts = [12, 19, 3, 5, 2]; // Primer brojeva
 
     const backgroundColors = [
@@ -48,9 +48,7 @@ function fetchAndUpdateChart() {
 
 document.addEventListener('DOMContentLoaded', function() {
     fetchAndUpdateChart();
-    // Ukloni setInterval ako ne želiš osvežavanje
-    // setInterval(fetchAndUpdateChart, 5 * 60 * 1000); // Refresh every 5 minutes
-    console.log("lalala")
+    setInterval(fetchAndUpdateChart, 5 * 60 * 1000); // Refresh every 5 minutes
 });
 
 // sidebar

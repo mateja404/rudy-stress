@@ -77,6 +77,30 @@ header ul li a:hover {
     color: #fff !important;
 }
 
+.menu-btn {
+    display: none;
+}
+
+.sidebar {
+    position: absolute;
+    top: -16px;
+    background-color: #273245;
+    width: 100%;
+    height: 260px;
+    display: none;
+    flex-direction: column;
+    gap: 7px;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.active-sidebar {
+    display: inline-flex;
+    opacity: 1;
+}
+
 .total-data {
     display: flex;
     flex-direction: row;
@@ -255,12 +279,10 @@ header ul li a:hover {
     overflow: hidden;
 }
 
-.methods-container h1 {
+.methods-container h2 {
     color: #fff;
     background: none;
-    font-size: 1.3rem;
     margin-left: 30px;
-    padding-top: 20px;
 }
 
 .charts {
@@ -298,30 +320,54 @@ footer span {
     color: darkorange;
 }
 
-.menu-btn {
-    z-index: 10;
-    position: absolute;
-    right: 0;
+@media screen and (max-width: 800px) {
+    .hideOnMobile {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+        z-index: 10;
+        position: absolute;
+        right: 0;
+    }
 }
 
-.sidebar {
-    position: absolute;
-    top: -16px;
-    background-color: #273245;
-    width: 100%;
-    height: 260px;
-    display: none;
-    flex-direction: column;
-    gap: 7px;
-    text-align: center;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
+@media screen and (max-width: 770px) {
+    .hideOnMobile {
+        display: none;
+    }
 
-.active-sidebar {
-    display: inline-flex;
-    opacity: 1;
+    .menu-btn {
+        display: block;
+        z-index: 10;
+        position: absolute;
+        right: 0;
+    }
+
+    .total-users h2 {
+        left: 10px;
+    }
+
+    .total-users p {
+        left: 10px;
+    }
+
+    .total-attacks h2 {
+        left: 10px;
+    }
+
+    .total-attacks p {
+        left: 10px;
+    }
+
+    .total-servers h2 {
+        left: 10px;
+    }
+
+    .total-servers p {
+        left: 10px;
+    }
 }
 
 @media screen and (max-width: 576px) {
@@ -329,9 +375,16 @@ footer span {
         display: none;
     }
 
+    .menu-btn {
+        display: block;
+        z-index: 10;
+        position: absolute;
+        right: 0;
+    }
+
     .total-data {
         flex-direction: column;
-        transform: translateY(50%);
+        transform: translateY(40%);
     }
 
     .charts {
