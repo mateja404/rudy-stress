@@ -1,0 +1,98 @@
+::-webkit-scrollbar-thumb:hover {
+    background: #0a0c17;
+}
+
+* {
+    font-family: "Afacad Flux", sans-serif;
+}
+
+body {
+    background: #0e1323;
+}
+
+header {
+    display: flex;
+    width: 100vw;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(60deg, #0a0e19, #0a0e19, #090e18, #090e18);
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+header ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header ul li {
+    display: inline;
+    font-size: 1.3rem;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+header ul li a {
+    color: rgba(255,255,255,.5);
+    text-decoration: none;
+    transition: .2s;
+}
+
+header ul li a i {
+    transform: translateY(2px);
+}
+
+header ul li a:hover {
+    color: #fff;
+    transition: .2s;
+}
+
+.active {
+    background-color: #212835;
+    padding: 8px;
+    /*box-shadow: 0 0 10px #212835;*/
+    border-radius: 5px;
+    color: #fff !important;
+}
+
+.menu-btn {
+    display: none;
+}
+
+.sidebar {
+    position: absolute;
+    top: -16px;
+    background-color: #273245;
+    width: 100%;
+    height: 260px;
+    display: none;
+    flex-direction: column;
+    gap: 7px;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.active-sidebar {
+    display: inline-flex;
+    opacity: 1;
+}
+
+@media screen and (max-width: 800px) {
+    .hideOnMobile {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+        z-index: 510;
+        position: absolute;
+        right: 0;
+    }
+}
