@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rudy Stresser | Panel</title>
+    <link rel="stylesheet" href="css/panel.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+<header>
+    <ul>
+        <li class="hideOnMobile"><a href="/dashboard"><i class='bx bx-desktop'></i> Dashboard</a></li>
+        <li class="hideOnMobile"><a href="/panel" class="active"><i class='bx bx-wifi-off'></i> Panel</a></li>
+        <li class="hideOnMobile"><a href="/purchase"><i class='bx bx-cart' ></i> Purchase</a></li>
+        <li class="hideOnMobile"><a href="/"><i class='bx bxl-telegram' ></i> Telegram</a></li>
+        <li class="hideOnMobile"><a href="/profile"><i class='bx bx-cog' ></i> Settings</a></li>
+        <li class="hideOnMobile"><a href="#"><i class='bx bxs-log-out' ></i> Logout</a></li>
+        <li class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></li>
+    </ul>
+    <ul class="sidebar">
+        <li><a href="/dashboard"><i class='bx bx-desktop'></i> Dashboard</a></li>
+        <li><a href="/panel" class="active"><i class='bx bx-wifi-off'></i> Panel</a></li>
+        <li><a href="/purchase"><i class='bx bx-cart' ></i> Purchase</a></li>
+        <li><a href="/"><i class='bx bxl-telegram' ></i> Telegram</a></li>
+        <li><a href="/profile"><i class='bx bx-cog' ></i> Settings</a></li>
+        <li><a href="#"><i class='bx bxs-log-out' ></i> Logout</a></li>
+    </ul>
+</header>
+
+<main>
+    <div class="panel-container">
+        <div class="tabs">
+            <ul>
+                <li data-tab-target="#layer4" class="tabButton selected"><a href="#">Layer 4</a></li>
+                <li data-tab-target="#layer7" class="tabButton"><a href="#">Layer 7</a></li>
+            </ul>
+        </div>
+        <div class="attack-container"></div>
+        <div class="ongoing-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>Time</th>
+                        <th>Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>google.com</td>
+                        <td>443</td>
+                        <td>60</td>
+                        <td>CLOUDFLARE</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer><a href="/home"><span>Rudy Stresser</span> &copy; 2024 | All rights reserved</a></footer>
+
+<script src="js/panel.js"></script>
+<script src="https://kit.fontawesome.com/18139eb2a3.js" crossorigin="anonymous"></script>
+</body>
+</html>
