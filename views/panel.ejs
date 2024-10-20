@@ -38,7 +38,43 @@
                 <li data-tab-target="#layer7" class="tabButton"><a href="#">Layer 7</a></li>
             </ul>
         </div>
-        <div class="attack-container"></div>
+        <div class="attack-container">
+            <div id="layer4" class="actives" data-tab-content>
+                <div class="inputs">
+                    <div class="input-group">
+                        <label>Host</label>
+                        <input placeholder="121.23.213.4">
+                    </div>
+                    <div class="input-group">
+                        <label>Port</label>
+                        <input placeholder="121.23.213.4">
+                    </div>
+                    <div class="input-group">
+                        <label>Time</label>
+                        <input placeholder="121.23.213.4">
+                    </div>
+                    <div class="input-group">
+                        <label>Method</label>
+                        <select>
+                            <option disabled>AMP</option>
+                            <option>DNS</option>
+                            <option disabled>TCP</option>
+                            <option>TCP-BYPASS</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Concurents <span class="display-conc"></span></label>
+                        <input type="range" min="1" max="2" value="1" class="concRange">
+                    </div>
+                </div>
+                <a href="#" class="start-attack">Start Attack</a>
+            </div>
+            <div id="layer7" class="" data-tab-content>
+                <input placeholder="as">
+                <input placeholder="as">
+                <input placeholder="as">
+            </div>
+        </div>
         <div class="ongoing-container">
             <table>
                 <thead>

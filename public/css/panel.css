@@ -25,6 +25,7 @@
 
 body {
     background: #0e1323;
+    z-index: 0;
 }
 
 header {
@@ -38,7 +39,7 @@ header {
     background: linear-gradient(60deg, #0a0e19, #0a0e19, #090e18, #090e18);
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 10;
 }
 
 header ul {
@@ -91,7 +92,7 @@ header ul li a:hover {
     flex-direction: column;
     gap: 7px;
     text-align: center;
-    z-index: 1;
+    z-index: 500;
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -99,6 +100,7 @@ header ul li a:hover {
 .active-sidebar {
     display: inline-flex;
     opacity: 1;
+    z-index: 500;
 }
 
 .panel-container {
@@ -110,11 +112,13 @@ header ul li a:hover {
 .attack-container {
     display: flex;
     width: 600px;
-    height: 600px;
+    height: 470px;
     background-color: #273245;
     transform: translateY(180px) translateX(220px);
     border-radius: 5px;
     z-index: 0;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .ongoing-container {
@@ -149,14 +153,14 @@ th {
     align-items: center;
     justify-content: center;
     margin-top: -20px;
-    z-index: 10;
+    z-index: 1;
     position: relative;
 }
 
 .tabs ul {
     position: absolute;
     top: 180px;
-    transform: translateX(200%) translateY(150%);
+    transform: translateX(240%) translateY(150%);
     white-space: nowrap;
 }
 
@@ -169,17 +173,18 @@ th {
     color: #fff;
     text-decoration: none;
     margin-left: 0;
+    font-size: 1.1rem;
 }
 
-.tabButton.selected a {
+.tabButton.selected {
     color: #fff;
     font-size: 1.1rem;
     background-color: darkorange;
     border-radius: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
     box-shadow: 0 0 10px darkorange;
 }
 
@@ -191,8 +196,78 @@ th {
     display: block;
 }
 
+.inputs {
+    transform: translateY(100px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 1.2rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 45%;
+}
+
+.input-group label {
+    color: darkorange;
+    text-shadow: 0 0 5px darkorange;
+}
+
+.input-group input {
+    border: 2px solid #fff;
+    outline: none;
+    height: 28px;
+}
+
+.input-group input::placeholder {
+    font-size: 1rem;
+}
+
+.input-group select {
+    outline: none;
+    height: 32px;
+}
+
+.input-group input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: calc(100% - 10px);
+    height: 8px;
+    background: gray;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    z-index: 10;
+}
+
+.input-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: darkorange;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.attack-container .start-attack {
+    position: absolute;
+    bottom: 70px;
+    left: 20px;
+    color: #fff;
+    background-color: #f39624;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
 footer {
-    margin-top: 300px;
+    margin-top: 440px;
     text-align: center;
 }
 
@@ -215,7 +290,7 @@ footer span {
 
     .menu-btn {
         display: block;
-        z-index: 10;
+        z-index: 510;
         position: absolute;
         right: 0;
     }

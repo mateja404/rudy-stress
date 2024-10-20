@@ -11,7 +11,7 @@ menuButton.addEventListener("click", function() {
 
 const tabs = document.querySelectorAll('[data-tab-target]');
 const tabContents = document.querySelectorAll('[data-tab-content]');
-const tabButtons = document.querySelectorAll('tabButton');
+const tabButtons = document.querySelectorAll('.tabButton');
 
 tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -31,9 +31,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tabButtons.forEach(tabButton => {
         tabButton.addEventListener('click', () => {
-            tabButtons.forEach(btn => btn.classList.remove('panama'));
+            tabButtons.forEach(btn => btn.classList.remove('selected'));
 
             tabButton.classList.add('selected');
         });
     });
 });
+
+// conc display
+
+let concValue = document.querySelector(".concRange");
+let displayValue = document.querySelector(".display-conc");
+
+concValue.addEventListener('input', function() {
+    displayValue.textContent = concValue.value;
+});
+
+function firstConcValue() {
+    displayValue.textContent = concValue.value;
+}
+firstConcValue();
