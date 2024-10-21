@@ -84,6 +84,66 @@ header ul li a:hover {
     opacity: 1;
 }
 
+[data-tab-content] {
+    display: none;
+}
+
+[data-tab-content].actives {
+    display: flex;
+}
+
+.news-sec {
+    display: flex;
+    position: relative;
+    color: white;
+    width: 500px;
+    height: 300px;
+    background-color: #273245;
+    margin-top: 220px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    border-radius: 5px;
+}
+
+.news-sec h1 {
+    position: absolute;
+    top: 0;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input {
+    height: 27px;
+    background-color: #0e1323;
+    outline: none;
+    border: none;
+    text-indent: 15px;
+    color: #fff;
+}
+
+button {
+    background-color: #f39624;
+    color: #fff;
+    border: none;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    outline: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px darkorange, 0 0 10px darkorange;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 800px) {
     .hideOnMobile {
         display: none;
