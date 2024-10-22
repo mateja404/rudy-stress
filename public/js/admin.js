@@ -39,3 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// reveal api
+
+let revealButton = document.querySelector(".reveal-click");
+let apiUrls = document.querySelectorAll(".base-url");
+
+revealButton.addEventListener("click", function() {
+    apiUrls.forEach(function(apiUrl) {
+        apiUrl.classList.toggle("visible-data");
+    });
+});

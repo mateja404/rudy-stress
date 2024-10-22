@@ -90,6 +90,9 @@ header ul li a:hover {
 
 [data-tab-content].actives {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .news-sec {
@@ -100,8 +103,6 @@ header ul li a:hover {
     height: 300px;
     background-color: #273245;
     margin-top: 220px;
-    margin-left: auto;
-    margin-right: auto;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
@@ -113,6 +114,70 @@ header ul li a:hover {
     position: absolute;
     top: 0;
     text-align: center;
+}
+
+.active-news {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 300px;
+    background-color: #273245;
+    margin-top: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+}
+
+.reedem-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 220px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+}
+
+.reedem-sec select {
+    outline: none;
+    background-color: #090e18;
+    color: #fff;
+    width: calc(80% - 20px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reedem-sec button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateY(30px);
+}
+
+.apis-sec {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    flex-wrap: wrap;
+}
+
+.apis-sec input {
+    border: 1px solid darkorange;
+}
+
+.apis-sec a {
+    color: #fff;
+}
+
+.base-url {
+    color: transparent;
+}
+
+.visible-data {
+    color: #fff;
 }
 
 form {
@@ -144,7 +209,7 @@ button {
     cursor: pointer;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 938px) {
     .hideOnMobile {
         display: none;
     }
@@ -154,5 +219,33 @@ button {
         z-index: 510;
         position: absolute;
         right: 0;
+    }
+
+    .news-sec {
+        width: calc(100% - 10px);
+    }
+
+    .active-news {
+        width: calc(100% - 25px);
+    }
+
+    .reedem-sec {
+        width: calc(100% - 10px);
+    }
+
+    .reedem-sec select {
+        width: calc(50% - 10px);
+    }
+
+    .apis-sec {
+        width: calc(100% - 10px);
+    }
+
+    .apis-sec .inputs {
+        width: calc(100% - 10px);
+    }
+
+    .apis-sec table {
+        width: 80%;
     }
 }
