@@ -8,16 +8,18 @@ const bcrypt = require('bcrypt');
 const port = 80;
 
 const adminMiddleware = require('./middleware/admin');
+const promoterMiddleware = require('./middleware/promoter');
 
-app.set('view engine', 'ejs');
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static("public"));
+app.set('trust proxy', true);
+app.set("view engine", 'ejs');
 app.use(session({
     secret: "miroljub",
     resave: true,
     saveUninitialized: true
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
     if (req.originalUrl === '/') {
@@ -37,20 +39,90 @@ app.get('/login', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
     if (req.session.logged) {
-        const username = req.session.username;
-        
-        database.query('SELECT isAdmin FROM users WHERE name = ?', [username], (error, results) => {
-            if (error) throw error;
-            req.session.isAdmin = results.length > 0 ? results[0].isAdmin : 0;
-            res.render('dashboard', { 
-                username: username,
-                isAdmin: req.session.isAdmin
+        database.query('SELECT COUNT(*) AS totalUsers FROM users', (error, userResults) => {
+            if (error) {
+                throw error;
+            }
+            const totalUsers = userResults[0].totalUsers;
+            const username = req.session.username;
+            database.query('SELECT COUNT(*) AS totalAttacks FROM attacks', (error, attackResults) => {
+                if (error) {
+                    throw error;
+                }
+                const totalAttacks = attackResults[0].totalAttacks;
+                database.query('SELECT setting_value FROM settings WHERE setting_name = ?', ['totalServers'], (err, settingsResults) => {
+                    if (err) {
+                        console.error('Error fetching settings:', err);
+                        res.status(500).send('Internal Server Error. Please try reloading page.');
+                        return;
+                    }
+                    const totalServers = settingsResults.length > 0 ? settingsResults[0].setting_value : '0';
+                    database.query('SELECT title, content, created_at, id FROM news ORDER BY created_at DESC', (err, newsResults) => {
+                        if (err) {
+                            console.error('Error fetching news:', err);
+                            res.status(500).send('Internal Server Error. Please try reloading page.');
+                            return;
+                        }
+                        const news = newsResults;
+                        database.query('SELECT isAdmin, isPromoter FROM users WHERE name = ?', [username], (error, results) => {
+                            if (error) throw error;
+                            req.session.isAdmin = results.length > 0 ? results[0].isAdmin : 0;
+                            req.session.isPromoter = results.length > 0 ? results[0].isPromoter : 0;
+                            res.render('dashboard', {
+                                username: username,
+                                isAdmin: req.session.isAdmin,
+                                isPromoter: req.session.isPromoter,
+                                totalUsers: totalUsers,
+                                totalAttacks: totalAttacks,
+                                totalServers: totalServers,
+                                news: news
+                            });
+                        });
+                    });
+                });
             });
         });
     } else {
         res.redirect('/login');
     }
 });
+
+app.get('/api/dashboard-data', (req, res) => {
+    if (req.session.logged) {
+        database.query('SELECT COUNT(*) AS totalUsers FROM users', (error, userResults) => {
+            if (error) {
+                throw error;
+            }
+            const totalUsers = userResults[0].totalUsers;
+            const username = req.session.username;
+
+            database.query('SELECT COUNT(*) AS totalAttacks FROM attacks', (error, attackResults) => {
+                if (error) {
+                    throw error;
+                }
+                const totalAttacks = attackResults[0].totalAttacks;
+
+                database.query('SELECT setting_value FROM settings WHERE setting_name = ?', ['totalServers'], (err, settingsResults) => {
+                    if (err) {
+                        console.error('Error fetching settings:', err);
+                        res.status(500).send('Internal Server Error. Please try reloading page.');
+                        return;
+                    }
+                    const totalServers = settingsResults.length > 0 ? settingsResults[0].setting_value : '0';
+                    
+                    res.json({
+                        totalUsers: totalUsers,
+                        totalAttacks: totalAttacks,
+                        totalServers: totalServers
+                    });
+                });
+            });
+        });
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+});
+
 
 app.get('/panel', (req, res) => {
     if (req.session.logged) {
@@ -103,6 +175,7 @@ app.post('/login', async (req, res) => {
         req.session.logged = true;
         req.session.username = username;
         req.session.isAdmin = user.isAdmin;
+        req.session.isPromoter = user.isPromoter; // Dodaj ovu liniju
         res.redirect("/dashboard");
     } catch (error) {
         console.error("Error:", error);
@@ -119,6 +192,128 @@ app.get('/logout', (req, res) => {
         res.redirect('/login');
     });
 });
+
+app.get('/noaccess', (req, res) => {
+    res.render('noaccess');
+});
+
+/////////////////////////////////////////////////////////////PROMOTER
+
+app.get('/promoter', promoterMiddleware, (req, res) => {
+    if (req.session.logged && req.session.isPromoter) {
+        res.render('promoter', { isPromoter: req.session.isPromoter, username: req.session.username });
+    } else {
+        res.redirect('/noaccess');
+    }
+});
+
+const imgbbApiKey = 'd3aacfaa24bfb9801f8a7caddef0fbc2';
+
+async function uploadImageToImgBB(imageBuffer, title) {
+    const formData = new URLSearchParams();
+    formData.append('key', imgbbApiKey);
+    formData.append('image', imageBuffer.toString('base64'));
+    formData.append('name', title);
+
+    const response = await fetch('https://api.imgbb.com/1/upload', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await response.json();
+    return data;
+}
+
+app.post('/send-promotion', (req, res) => {
+    const { type, link, title, username, additionalLink } = req.body;
+    const now = new Date().getTime();
+    const userIp = req.ip;
+
+    if (!username || (type === 'youtube' && !link.trim()) || (type === 'image' && !title.trim())) {
+        return res.json({ success: false, message: 'Required fields cannot be empty.' });
+    }
+
+    const lastPromotion = cooldowns[username];
+    if (lastPromotion && now - lastPromotion < COOLDOWN_TIME) {
+        const remainingTime = Math.ceil((COOLDOWN_TIME - (now - lastPromotion)) / 1000);
+        return res.json({ success: false, message: `You must wait ${remainingTime} seconds before submitting again.` });
+    }
+
+    let message = '';
+
+    if (type === 'youtube') {
+        message += `**<a:celebrate:811878501594169364> New YouTube Link Submitted**\n`;
+        message += `**<:promoter:1273056458354720819> Promoter:** ${username}\n`;
+        message += `**<a:notu12:1045635332110037033> Title:** ${title}\n`;
+        message += `**<:YouTube:1199423327639445655> YouTube Link:** ${link}\n`;
+        if (additionalLink) {
+            message += `**<:plus:1275559275082547363> Additional Link:** ${additionalLink}\n`;
+        }
+        const sql = `INSERT INTO promoters (username, last_promote_ip, title, media_link) VALUES (?, ?, ?, ?)`;
+        database.query(sql, [username, userIp, title, link], (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.json({ success: false, message: 'Database error.' });
+            }
+            sendDiscordWebhook(message)
+                .then(() => {
+                    cooldowns[username] = now;
+                    res.json({ success: true, message: 'YouTube link successfully sent.' });
+                })
+                .catch(error => {
+                    console.error('Webhook error:', error);
+                    res.json({ success: false, message: 'Failed to send Discord webhook.' });
+                });
+        });
+    } else if (type === 'image') {
+        const imageBuffer = Buffer.from(req.body.image, 'base64');
+        uploadImageToImgBB(imageBuffer, title)
+            .then(response => {
+                const imageUrl = response.data.url;
+                message += `**<a:celebrate:811878501594169364> New Image/GIF Uploaded**\n`;
+                message += `**<:promoter:1273056458354720819> Promoter:** ${username}\n`;
+                message += `<a:notu12:1045635332110037033> ${title}\n`;
+                message += `**🖼️ Image URL:** ${imageUrl}\n`;
+                if (additionalLink) {
+                    message += `**<:plus:1275559275082547363> Additional Link:** ${additionalLink}\n`;
+                }
+                const sql = `INSERT INTO promoters (username, last_promote_ip, title, media_link) VALUES (?, ?, ?, ?)`;
+                database.query(sql, [username, userIp, title, imageUrl], (err, result) => {
+                    if (err) {
+                        console.error(err);
+                        return res.json({ success: false, message: 'Database error.' });
+                    }
+                    sendDiscordWebhook(message)
+                        .then(() => {
+                            cooldowns[username] = now;
+                            res.json({ success: true, message: 'Image/GIF successfully uploaded.' });
+                        })
+                        .catch(error => {
+                            console.error('Webhook error:', error);
+                            res.json({ success: false, message: 'Failed to send Discord webhook.' });
+                        });
+                });
+            })
+            .catch(error => {
+                console.error('ImgBB error:', error);
+                res.json({ success: false, message: 'Failed to upload image to ImgBB.' });
+            });
+    } else {
+        res.json({ success: false, message: 'Invalid type.' });
+    }
+});
+
+function sendDiscordWebhook(message) {
+    const webhookUrl = 'https://discord.com/api/webhooks/1274773722753925120/xxh-W_F2VqvNyjWCVjEEipCnzri8QfVuKTJn5Oq4gJnLZROiH_WQd7iLvZMjffzDMWlU';
+    return fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            content: message
+        })
+    });
+}
 
 /////////////////////////////////////////////////////////////ADMIN
 
@@ -297,6 +492,9 @@ app.post('/admin/news', (req, res) => {
             users: [],
             plans: [],
             apis: [],
+            redeemCodes: [],
+            bannedUsers: [],
+            methods: [],
             news: []
         });
     }
@@ -311,6 +509,9 @@ app.post('/admin/news', (req, res) => {
                 users: [],
                 plans: [],
                 apis: [],
+                redeemCodes: [],
+                bannedUsers: [],
+                methods: [],
                 news: []
             });
         }
@@ -325,6 +526,9 @@ app.post('/admin/news', (req, res) => {
                     users: [],
                     plans: [],
                     apis: [],
+                    redeemCodes: [],
+                    bannedUsers: [],
+                    methods: [],
                     news: []
                 });
             }
@@ -339,6 +543,9 @@ app.post('/admin/news', (req, res) => {
                         users: [],
                         plans: [],
                         apis: [],
+                        redeemCodes: [],
+                        bannedUsers: [],
+                        methods: [],
                         news: news
                     });
                 }
@@ -353,6 +560,9 @@ app.post('/admin/news', (req, res) => {
                             users: users,
                             plans: [],
                             apis: [],
+                            redeemCodes: [],
+                            bannedUsers: [],
+                            methods: [],
                             news: news
                         });
                     }
@@ -361,7 +571,10 @@ app.post('/admin/news', (req, res) => {
                         users: users,
                         plans: plans,
                         news: news,
+                        redeemCodes: [],
+                        bannedUsers: [],
                         apis: [],
+                        methods: [],
                         successMessage: 'News added successfully!',
                         errorMessage: null
                     });
@@ -378,7 +591,11 @@ app.post('/admin/delete-news', (req, res) => {
             errorMessage: 'News ID is required for deletion.',
             successMessage: null,
             username: req.session.username,
-            news: []
+            news: [],
+            redeemCodes: [],
+            bannedUsers: [],
+            methods: [],
+            plans: []
         });
     }
 
@@ -390,7 +607,11 @@ app.post('/admin/delete-news', (req, res) => {
                 errorMessage: 'Failed to delete news.',
                 successMessage: null,
                 username: req.session.username,
-                news: []
+                news: [],
+                redeemCodes: [],
+                bannedUsers: [],
+                methods: [],
+                plans: []
             });
         }
 
@@ -401,7 +622,11 @@ app.post('/admin/delete-news', (req, res) => {
                     errorMessage: 'Failed to fetch news.',
                     successMessage: null,
                     username: req.session.username,
-                    news: []
+                    news: [],
+                    plans: [],
+                    bannedUsers: [],
+                    methods: [],
+                    redeemCodes: []
                 });
             }
 
@@ -410,6 +635,10 @@ app.post('/admin/delete-news', (req, res) => {
                 news: news,
                 apis: [],
                 successMessage: 'News deleted successfully!',
+                plans: [],
+                redeemCodes: [],
+                bannedUsers: [],
+                methods: [],
                 errorMessage: null
             });
         });
@@ -652,6 +881,153 @@ app.post('/admin/settings', adminMiddleware, (req, res) => {
     }
 
     res.redirect('/admin');
+});
+
+app.post('/set-balance', adminMiddleware, (req, res) => {
+    const { userId, balance } = req.body;
+
+    database.query('UPDATE users SET balance = ? WHERE id = ?', [balance, userId], (err, result) => {
+        if (err) {
+            console.error('Error updating balance:', err);
+            req.session.errorMessage = 'Failed to update balance';
+        } else {
+            console.log(`Successfully updated balance for user with ID ${userId} to ${balance}`);
+            req.session.successMessage = 'Successfully updated balance';
+        }
+
+        setTimeout(() => {
+            res.redirect('/admin');
+        }, 3000);
+    });
+});
+
+app.post('/set-promoter', adminMiddleware, (req, res) => {
+    const { userId } = req.body;
+    database.query('SELECT * FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err) {
+            console.error('Error checking user:', err);
+            req.session.errorMessage = 'Failed to set promoter';
+            return res.redirect('/admin');
+        }
+        const user = results[0];
+        if (!user) {
+            req.session.errorMessage = 'User not found';
+            return res.redirect('/admin');
+        }
+        if (user.isPromoter) {
+            req.session.errorMessage = 'User is already a promoter';
+            return res.redirect('/admin');
+        }
+
+        database.query('UPDATE users SET isPromoter = 1 WHERE id = ?', [userId], (err, result) => {
+            if (err) {
+                console.error('Error setting promoter:', err);
+                req.session.errorMessage = 'Failed to set promoter';
+            } else {
+                console.log(`Successfully set promoter for user with ID ${userId}`);
+                req.session.successMessage = `Successfully set promoter for user`;
+            }
+            setTimeout(() => {
+                res.redirect('/admin');
+            }, 3000);
+        });
+    });
+});
+
+app.post('/remove-promoter', adminMiddleware, (req, res) => {
+    const { userId } = req.body;
+    database.query('SELECT * FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err) {
+            console.error('Error checking user:', err);
+            req.session.errorMessage = 'Failed to remove promoter';
+            return res.redirect('/admin');
+        }
+        const user = results[0];
+        if (!user) {
+            req.session.errorMessage = 'User not found';
+            return res.redirect('/admin');
+        }
+        if (!user.isPromoter) {
+            req.session.errorMessage = 'User is not a promoter';
+            return res.redirect('/admin');
+        }
+        database.query('UPDATE users SET isPromoter = 0 WHERE id = ?', [userId], (err, result) => {
+            if (err) {
+                console.error('Error removing promoter:', err);
+                req.session.errorMessage = 'Failed to remove promoter';
+            } else {
+                console.log(`Successfully removed promoter for user with ID ${userId}`);
+                req.session.successMessage = `Successfully removed promoter for user`;
+            }
+            setTimeout(() => {
+                res.redirect('/admin');
+            }, 3000);
+        });
+    });
+});
+
+app.post('/set-plan', adminMiddleware, (req, res) => {
+    const { userId, plan } = req.body;
+
+    database.query('SELECT plan_name FROM plans WHERE id = ?', [plan], (err, rows) => {
+        if (err) {
+            console.error('Error fetching plan details:', err);
+            req.session.errorMessage = 'Failed to update plan';
+            return res.redirect('/admin');
+        }
+
+        if (rows.length === 0) {
+            console.error('Plan with ID ' + plan + ' not found');
+            req.session.errorMessage = 'Plan not found';
+            return res.redirect('/admin');
+        }
+
+        const planName = rows[0].plan_name;
+
+        database.query("UPDATE users SET plan = ?, expires_at = DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE id = ?", [planName, userId], (err, result) => {
+            if (err) {
+                console.error('Error updating plan:', err);
+                req.session.errorMessage = 'Failed to update plan';
+            } else {
+                console.log(`Successfully updated plan for user with ID ${userId} to plan ${planName}`);
+                req.session.successMessage = `Successfully updated plan to ${planName}`;
+            }
+
+            res.redirect('/admin');
+        });
+    });
+});
+
+///////////////////////////////////////////17.8.2K24 - IVKEBOYARA - SISTEM ZA OPŠTE SKIDANJE PLANOVA KADA PRODJE NJIHOVO VREME
+setInterval(() => {
+    database.query("UPDATE users SET plan = 'Free Plan' WHERE expires_at <= NOW() AND plan != 'Free Plan'", (err, result) => {
+        if (err) {
+            console.error('Error reverting plans to Free Plan:', err);
+        } else if (result.affectedRows > 0) {
+            console.log(`${result.affectedRows} userima je skinut plan na Free Plan, jer im je istekao isti.`);
+        }
+    });
+}, 60000); // 60 sek
+
+
+app.post('/remove-plan', (req, res) => {
+    const userId = req.body.userId;
+
+    if (!req.session.isAdmin) {
+        return res.status(403).send('Access denied');
+    }
+
+    const query = 'UPDATE users SET plan = "Free Plan", expires_at = NULL WHERE id = ?';
+    database.query(query, [userId], (error, results) => {
+        if (error) {
+            console.error('Error removing plan:', error);
+            req.session.errorMessage = 'Failed to remove plan';
+            return res.redirect('/admin');
+        }
+
+        req.session.successMessage = 'Plan successfully removed and set to Free Plan';
+        res.redirect('/admin');
+    });
 });
 
 app.listen(port, () => {
