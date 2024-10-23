@@ -168,6 +168,11 @@ header ul li a:hover {
     border: 1px solid darkorange;
 }
 
+.apis-sec select {
+    color: #fff;
+    background-color: #0e1323;
+}
+
 .apis-sec a {
     color: #fff;
 }
@@ -178,6 +183,479 @@ header ul li a:hover {
 
 .visible-data {
     color: #fff;
+}
+
+.balance-sec {
+    width: 500px;
+    height: 280px;
+    background-color: #273245;
+    margin-top: 220px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.balance-sec input, select, button {
+    width: calc(80% - 10px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.balance-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.password-sec {
+    width: 500px;
+    height: 280px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.password-sec input, select, button {
+    margin-left: auto;
+    margin-right: auto;
+    outline: none;
+}
+
+.password-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.cooldown-sec {
+    width: 500px;
+    height: 320px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.cooldown-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cooldown-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.removecd-sec {
+    width: 500px;
+    height: 200px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.removecd-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.removecd-sec button {
+    transform: translateY(20px);
+}
+
+.ban-sec {
+    width: 500px;
+    height: 280px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.ban-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.ban-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ban-sec button {
+    transform: translateY(20px);
+}
+
+.unban-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.unban-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.unban-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.unban-sec button {
+    transform: translateY(20px);
+}
+
+.banip-sec {
+    width: 500px;
+    height: 280px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.banip-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.banip-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.banip-sec button {
+    transform: translateY(20px);
+}
+
+.unbanip-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.unbanip-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.unbanip-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.unbanip-sec button {
+    transform: translateY(20px);
+}
+
+.plan-sec {
+    width: 500px;
+    height: 320px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.plan-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.plan-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.plan-sec button {
+    transform: translateY(20px);
+}
+
+.rplan-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+}
+
+.rplan-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.rplan-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.rplan-sec button {
+    transform: translateY(20px);
+}
+
+.methods-sec {
+    width: 500px;
+    height: 550px;
+    background-color: #273245;
+    margin-top: 220px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.methods-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.methods-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.methods-sec button {
+    transform: translateY(20px);
+}
+.updatem-sec {
+    width: 500px;
+    height: 550px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.updatem-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.updatem-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.updatem-sec button {
+    transform: translateY(20px);
+}
+
+.deletem-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.deletem-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.deletem-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.deletem-sec button {
+    transform: translateY(20px);
+}
+
+.settings-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.settings-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.settings-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.settings-sec button {
+    transform: translateY(20px);
+}
+
+.portbl-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 220px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.portbl-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.portbl-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.portbl-sec button {
+    transform: translateY(20px);
+}
+
+.rportbl-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.rportbl-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.rportbl-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.rportbl-sec button {
+    transform: translateY(20px);
+}
+
+.urlbl-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.urlbl-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.urlbl-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.urlbl-sec button {
+    transform: translateY(20px);
+}
+
+.rurlbl-sec {
+    width: 500px;
+    height: 210px;
+    background-color: #273245;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+.rurlbl-sec select {
+    background-color: #0e1323;
+    color: #fff;
+}
+
+.rurlbl-sec input {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.rurlbl-sec button {
+    transform: translateY(20px);
 }
 
 form {
@@ -207,6 +685,12 @@ button {
     border-radius: 5px;
     box-shadow: 0 0 5px darkorange, 0 0 10px darkorange;
     cursor: pointer;
+}
+
+@media screen and (max-width: 576px) {
+    table {
+        font-size: 0.8rem;
+    }
 }
 
 @media screen and (max-width: 938px) {
@@ -245,7 +729,75 @@ button {
         width: calc(100% - 10px);
     }
 
-    .apis-sec table {
-        width: 80%;
+    .balance-sec {
+        width: calc(100% - 10px);
+    }
+
+    .password-sec {
+        width: calc(100% - 10px);
+    }
+
+    .cooldown-sec {
+        width: calc(100% - 10px);
+    }
+
+    .removecd-sec {
+        width: calc(100% - 10px);
+    }
+
+    .ban-sec {
+        width: calc(100% - 10px);
+    }
+
+    .unban-sec {
+        width: calc(100% - 10px);
+    }
+
+    .banip-sec {
+        width: calc(100% - 10px);
+    }
+
+    .unbanip-sec {
+        width: calc(100% - 10px);
+    }
+
+    .plan-sec {
+        width: calc(100% - 10px);
+    }
+
+    .rplan-sec {
+        width: calc(100% - 10px);
+    }
+
+    .methods-sec {
+        width: calc(100% - 20px);
+    }
+
+    .updatem-sec {
+        width: calc(100% - 20px);
+    }
+
+    .deletem-sec {
+        width: calc(100% - 20px);
+    }
+
+    .settings-sec {
+        width: calc(100% - 20px);
+    }
+
+    .portbl-sec {
+        width: calc(100% - 20px);
+    }
+
+    .rportbl-sec {
+        width: calc(100% - 20px);
+    }
+
+    .urlbl-sec {
+        width: calc(100% - 20px);
+    }
+
+    .rurlbl-sec {
+        width: calc(100% - 20px);
     }
 }

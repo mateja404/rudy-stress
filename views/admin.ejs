@@ -81,34 +81,30 @@
             <div class="apis-sec">
                 <h2>Available APIs</h2>
                 <a href="#" class="reveal-click">Reveal API</a>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Base URL</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% if (apis && apis.length > 0) { %>
-                        <% apis.forEach(api => { %>
-                            <tr>
-                                <td><%= api.id %></td>
-                                <td class="base-url"><%= api.api_name %></td>
-                                <td class="base-url"><%= api.username %></td>
-                                <td class="base-url"><%= api.password %></td>
-                                <td class="base-url"><%= api.base_url %></td>
-                            </tr>
-                        <% }); %>
-                    <% } else { %>
+                    <table>
                         <tr>
-                            <td colspan="5">No APIs available.</td>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Base URL</th>
                         </tr>
-                    <% } %>
-                    </tbody>
-                </table>
+                        <% if (apis && apis.length > 0) { %>
+                            <% apis.forEach(api => { %>
+                                <tr>
+                                    <td><%= api.id %></td>
+                                    <td class="base-url"><%= api.api_name %></td>
+                                    <td class="base-url"><%= api.username %></td>
+                                    <td class="base-url"><%= api.password %></td>
+                                    <td class="base-url"><%= api.base_url %></td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5">No APIs available.</td>
+                            </tr>
+                        <% } %>
+                    </table>
                 <h2>Add New API</h2>
                 <div class="inputs">
                     <form action="/admin/add-api" method="POST">
@@ -127,21 +123,360 @@
 
                         <button type="submit">Add API</button>
                     </form>
+                    <% if (apis.length > 0) { %>
+                        <h2>Delete API</h2>
+                        <form action="/admin/delete-api" method="POST">
+                            <label for="delete_api_id">API ID:</label>
+                            <select id="delete_api_id" name="id" required>
+                                <option value="">Select an API to delete</option>
+                                <% apis.forEach(api => { %>
+                                    <option value="<%= api.id %>"><%= api.api_name %></option>
+                                <% }); %>
+                            </select>
+                            <button type="submit">Delete API</button>
+                        </form>
+                    <% } %>
                 </div>
+            </div>
+        </section>
 
-                <% if (apis.length > 0) { %>
-                    <h2>Delete API</h2>
-                    <form action="/admin/delete-api" method="POST">
-                        <label for="delete_api_id">API ID:</label>
-                        <select id="delete_api_id" name="id" required>
-                            <option value="">Select an API to delete</option>
-                            <% apis.forEach(api => { %>
-                                <option value="<%= api.id %>"><%= api.api_name %></option>
+        <section id="users" data-tab-content>
+            <div class="balance-sec">
+                <h2>Manage User Balance</h2>
+                <form action="/set-balance" method="POST">
+                    <label for="usersBalance">Select User:</label>
+                    <select id="usersBalance" name="userId">
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.id %>"><%= user.username %></option>
                             <% }); %>
-                        </select>
-                        <button type="submit">Delete API</button>
-                    </form>
-                <% } %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <label for="balance">New Balance:</label>
+                    <input type="number" id="balance" name="balance" placeholder="Enter new balance">
+                    <button type="submit">Set Balance</button>
+                </form>
+            </div>
+
+            <div class="password-sec">
+                <h2>Manage User Password</h2>
+                <form action="/change-pass" method="POST">
+                    <label for="usersPassword">Select User:</label>
+                    <select id="usersPassword" name="userId">
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.id %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <label for="password">New Password:</label>
+                    <input type="text" id="password-change" name="password" placeholder="Enter new password">
+                    <button type="submit">Set Password</button>
+                </form>
+            </div>
+
+            <div class="cooldown-sec">
+                <h2>Set Cooldown</h2>
+                <form id="setCooldownForm" method="POST" action="/setCooldown">
+                    <label for="usersCooldown">Select User:</label>
+                    <select id="usersCooldown" name="username" required>
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.username %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <label for="cooldown_time">Cooldown Time (in minutes):</label>
+                    <input type="number" id="cooldown_time" name="cooldown_time" placeholder="Time" required>
+                    <label for="reason">Reason:</label>
+                    <input type="text" id="reason" name="reason" placeholder="Reason" required>
+                    <button type="submit">Set Cooldown</button>
+                </form>
+            </div>
+
+            <div class="removecd-sec">
+                <h2>Remove User Cooldown</h2>
+                <form action="/removeCooldown" method="POST">
+                    <label for="removeCooldownUser">Select User:</label>
+                    <select id="removeCooldownUser" name="username" required>
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.username %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Remove Cooldown</button>
+                </form>
+            </div>
+
+            <div class="ban-sec">
+                <h2>Ban User</h2>
+                <form action="/ban-user" method="POST">
+                    <label for="banUser">Select User:</label>
+                    <select id="banUser" name="username" required>
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.username %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <label for="banReason">Reason:</label>
+                    <input type="text" id="banReason" name="banReason" placeholder="Enter reason for ban">
+                    <button type="submit">Ban User</button>
+                </form>
+            </div>
+
+            <div class="unban-sec">
+                <h2>Unban User</h2>
+                <form action="/unban-user" method="POST">
+                    <label for="unbanUser">Select Banned User:</label>
+                    <select id="unbanUser" name="username" required>
+                        <% if (bannedUsers && bannedUsers.length > 0) { %>
+                            <% bannedUsers.forEach(user => { %>
+                                <option value="<%= user.username %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No banned users available</option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Unban User</button>
+                </form>
+            </div>
+
+            <div class="banip-sec">
+                <h2>Ban IP Address</h2>
+                <form action="/ban-ip" method="POST">
+                    <label for="banUser">Select User:</label>
+                    <select id="banUser" name="username" required>
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.username %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <label for="banReason">Reason:</label>
+                    <input type="text" id="banReason" name="ban_reason" placeholder="Account sharing" required>
+                    <button type="submit">Ban IP</button>
+                </form>
+            </div>
+
+            <div class="unbanip-sec">
+                <h2>Unban IP Address</h2>
+                <form action="/unban-ip" method="POST">
+                    <label for="unbanIp">Select Banned IP:</label>
+                    <select id="unbanIp" name="ip_address" required>
+                        <% if (locals.bannedIPUsers && locals.bannedIPUsers.length > 0) { %>
+                            <% locals.bannedIPUsers.forEach(ip => { %>
+                                <option value="<%= ip.ip_address %>"><%= ip.ip_address %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No banned IP addresses available</option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Unban IP</button>
+                </form>
+            </div>
+
+            <div class="plan-sec">
+                <h2>Manage User Plans</h2>
+                <form action="/set-plan" method="POST">
+                    <label for="usersPlans">Select User:</label>
+                    <select id="usersPlans" name="userId">
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.id %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <label for="plans">Select Plan:</label>
+                    <select id="plans" name="plan">
+                        <% if (locals.plans && locals.plans.length > 0) { %>
+                            <% locals.plans.forEach(plan => { %>
+                                <option value="<%= plan.id %>"><%= plan.plan_name %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No plans available</option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Set Plan</button>
+                </form>
+            </div>
+
+            <div class="rplan-sec">
+                <h2>Remove User Plan</h2>
+                <form action="/remove-plan" method="POST">
+                    <label for="usersRemovePlan">Select User:</label>
+                    <select id="usersRemovePlan" name="userId">
+                        <% if (locals.users && locals.users.length > 0) { %>
+                            <% locals.users.forEach(user => { %>
+                                <option value="<%= user.id %>"><%= user.username %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No users available</option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Remove Plan</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="settings" data-tab-content>
+            <div class="methods-sec">
+                <h2>Manage Methods</h2>
+                <p><i class='bx bxs-info-circle'></i> Metode koje imaju max_slots = 0, se nece prikazivati u attack hubu.</p>
+                <h3>Add Method</h3>
+                <form action="/admin/add-method" method="POST">
+                    <label for="method">Method Name:</label>
+                    <input type="text" id="method" name="method" placeholder="Enter method name" required>
+
+                    <label for="category">Category:</label>
+                    <input type="text" id="category" name="category" placeholder="Enter method category">
+
+                    <label for="max_slots">Max Slots:</label>
+                    <input type="number" id="max_slots" name="max_slots" placeholder="Enter max slots" required>
+
+                    <label for="vip_methods">VIP Method:</label>
+                    <select id="vip_methods" name="vip_methods" required>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+
+                    <label for="layer">Layer:</label>
+                    <select id="layer" name="layer" required>
+                        <option value="4">Layer 4</option>
+                        <option value="7">Layer 7</option>
+                    </select>
+                    <button type="submit">Add Method</button>
+                </form>
+            </div>
+
+            <div class="updatem-sec">
+                <h3>Update Method</h3>
+                <form action="/admin/update-method" method="POST">
+                    <label for="method_id">Select Method:</label>
+                    <select id="method_id" name="methodId" required>
+                        <% if (methods && methods.length > 0) { %>
+                            <% methods.forEach(method => { %>
+                                <option value="<%= method.id %>"><%= method.method %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No methods available</option>
+                        <% } %>
+                    </select>
+
+                    <label for="update_method">Method Name:</label>
+                    <input type="text" id="update_method" name="methodName" placeholder="Enter method name">
+
+                    <label for="update_category">Category:</label>
+                    <input type="text" id="update_category" name="methodCategory" placeholder="Enter method category">
+
+                    <label for="update_max_slots">Max Slots:</label>
+                    <input type="number" id="update_max_slots" name="max_slots" placeholder="Enter max slots">
+
+                    <label for="update_vip_methods">VIP Method:</label>
+                    <select id="update_vip_methods" name="vip_methods">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+
+                    <label for="update_layer">Layer:</label>
+                    <select id="update_layer" name="layer">
+                        <option value="4">Layer 4</option>
+                        <option value="7">Layer 7</option>
+                    </select>
+
+                    <button type="submit">Update Method</button>
+                </form>
+            </div>
+
+            <div class="deletem-sec">
+                <h3>Delete Method</h3>
+                <form action="/admin/delete-method" method="POST">
+                    <label for="delete_method_id">Select Method:</label>
+                    <select id="delete_method_id" name="methodId" required>
+                        <% if (methods && methods.length > 0) { %>
+                            <% methods.forEach(method => { %>
+                                <option value="<%= method.id %>"><%= method.method %></option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">No methods available</option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Delete Method</button>
+                </form>
+            </div>
+
+            <div class="settings-sec">
+                <h2>Settings</h2>
+                <form action="/admin/settings" method="POST">
+                    <label for="totalServers">Total Servers:</label>
+                    <input type="number" id="totalServers" name="totalServers" placeholder="Enter number of total servers" required>
+                    <button type="submit">Save Settings</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="blacklist" data-tab-content>
+            <div class="portbl-sec">
+                <h2>Manage Port Blacklist</h2>
+                <form action="/admin/add-port-blacklist" method="POST">
+                    <label for="port">Blacklist Port:</label>
+                    <input type="number" id="port" name="port" placeholder="Enter Blacklist Port" required>
+                    <button type="submit">Add Blacklist</button>
+                </form>
+            </div>
+
+            <div class="rportbl-sec">
+                <h2>Remove from Port Blacklist</h2>
+                <form action="/admin/delete-port-blacklist" method="POST">
+                    <label for="blacklist_id">Select Port:</label>
+                    <select id="blacklist_id" name="id">
+                        <% if (locals.portBlacklist && locals.portBlacklist.length > 0) { %>
+                            <% locals.portBlacklist.forEach(item => { %>
+                                <option value="<%= item.id %>"><%= item.port %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                    <button type="submit">Remove from Blacklist</button>
+                </form>
+            </div>
+
+            <div class="urlbl-sec">
+                <h2>Manage URL Blacklist</h2>
+                <form action="/admin/add-blacklist" method="POST">
+                    <label for="url">Blacklist URL:</label>
+                    <input type="text" id="url" name="url" placeholder="Enter Blacklist URL" required>
+                    <button type="submit">Add Blacklist</button>
+                </form>
+            </div>
+
+            <div class="rurlbl-sec">
+                <h2>Remove from URL Blacklist</h2>
+                <form action="/admin/delete-blacklist" method="POST">
+                    <label for="blacklist_id">Select URL:</label>
+                    <select id="blacklist_id" name="id">
+                        <% if (locals.blacklist && locals.blacklist.length > 0) { %>
+                            <% locals.blacklist.forEach(item => { %>
+                                <option value="<%= item.id %>"><%= item.url %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                    <button type="submit">Remove from Blacklist</button>
+                </form>
             </div>
         </section>
     </main>
