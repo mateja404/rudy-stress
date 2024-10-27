@@ -5,11 +5,9 @@ const app = express();
 const database = require('./mysql');
 const axios = require('axios');
 const bcrypt = require('bcrypt');
-const port = 80;
+const port = 90;
 
 const adminMiddleware = require('./middleware/admin');
-const promoterMiddleware = require('./middleware/promoter');
-
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static("public"));
@@ -87,6 +85,14 @@ app.get('/dashboard', (req, res) => {
     }
 });
 
+app.get('/purchase', (req, res) => {
+    if (req.session.logged) {
+        res.render('purchase');
+    } else {
+        res.redirect('/login');
+    }
+});
+
 app.get('/api/dashboard-data', (req, res) => {
     if (req.session.logged) {
         database.query('SELECT COUNT(*) AS totalUsers FROM users', (error, userResults) => {
@@ -122,7 +128,6 @@ app.get('/api/dashboard-data', (req, res) => {
         res.status(401).send('Unauthorized');
     }
 });
-
 
 app.get('/panel', (req, res) => {
     if (req.session.logged) {
@@ -195,16 +200,6 @@ app.get('/logout', (req, res) => {
 
 app.get('/noaccess', (req, res) => {
     res.render('noaccess');
-});
-
-/////////////////////////////////////////////////////////////PROMOTER
-
-app.get('/promoter', promoterMiddleware, (req, res) => {
-    if (req.session.logged && req.session.isPromoter) {
-        res.render('promoter', { isPromoter: req.session.isPromoter, username: req.session.username });
-    } else {
-        res.redirect('/noaccess');
-    }
 });
 
 const imgbbApiKey = 'd3aacfaa24bfb9801f8a7caddef0fbc2';

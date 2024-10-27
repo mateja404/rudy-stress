@@ -117,20 +117,23 @@ header ul li a:hover {
 .plan {
     width: 280px;
     height: 400px;
-    background-color: purple;
+    background-color: #273245;
     color: #fff;
     text-align: center;
+    position: relative;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 hr {
     width: 50%;
     height: 2px;
-    background-color: #273245;
+    background-color: #995d15;
     border: none;
 }
 
 .plan p {
-    transform: translateY(10px);
+    transform: translateY(-5px);
 }
 
 .plan span {
@@ -139,6 +142,34 @@ hr {
 
 .plan sup {
     font-size: 1.2rem;
+}
+
+.plan ul {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-left: -35px;
+    margin-right: auto;
+    list-style-type: none;
+    font-size: 1.3rem;
+}
+
+.plan a {
+    position: relative;
+    top: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #995d15;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 0 5px darkorange, 0 0 10px darkorange;
 }
 
 @media screen and (max-width: 576px) {
@@ -154,6 +185,24 @@ hr {
     }
 
     .plan {
-        width: calc(80% - 1px);
+        width: calc(90% - 1px);
+    }
+}
+
+@media screen and (max-width: 801px) {
+    .hideOnMobile {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+        z-index: 10;
+        position: absolute;
+        right: 0;
+    }
+
+    .plans-container {
+        margin-top: 160px;
+        margin-bottom: 30px;
     }
 }
