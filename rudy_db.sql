@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2024 at 10:34 AM
+-- Generation Time: Oct 26, 2024 at 05:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -50,6 +50,30 @@ INSERT INTO `apis` (`id`, `api_name`, `username`, `password`, `base_url`) VALUES
 (8, 'Platinum II', 'TestH8', 'TestHub1238', 'http://link:1337/launch'),
 (9, 'Platinum III', 'TestH9', 'TestHub1239', 'http://link:1337/launch'),
 (15, 'Free Plan', 'TestHub1', 'TestHubKurac19', 'http://link:1337/launch');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attacks`
+--
+
+CREATE TABLE `attacks` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `host` varchar(255) NOT NULL,
+  `port` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `method` varchar(255) NOT NULL,
+  `timestamp` datetime DEFAULT NULL,
+  `last_attack_ip` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attacks`
+--
+
+INSERT INTO `attacks` (`id`, `username`, `host`, `port`, `time`, `method`, `timestamp`, `last_attack_ip`) VALUES
+(1, 'ivkeboyara', '51.254.139.153', 7777, 30, 'UDP-SAMP', '2024-08-23 22:51:41', '::1');
 
 -- --------------------------------------------------------
 
@@ -108,13 +132,6 @@ CREATE TABLE `news` (
   `content` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `news`
---
-
-INSERT INTO `news` (`id`, `title`, `content`, `created_at`) VALUES
-(1, 'test title', 'testing title', '2024-10-20 11:14:53');
 
 -- --------------------------------------------------------
 
@@ -189,7 +206,8 @@ CREATE TABLE `redeem_codes` (
 INSERT INTO `redeem_codes` (`id`, `code`, `plan_name`, `used_by`, `used_at`, `created_at`) VALUES
 (3, '6IDZLUR3-TLN6EAY9', 'Premium III', 'ivkeboyara', '2024-08-13 11:26:58', '2024-08-12 22:01:59'),
 (4, 'Y8B55JCL-S2QJPYQY', 'Premium I', 'ivkeboyara', '2024-08-13 11:16:20', '2024-08-13 11:16:01'),
-(5, 'SQKB4M2Z-Z7DJVY8G', 'Platinum III', 'ivkeboyara', '2024-08-13 12:33:16', '2024-08-13 12:32:31');
+(5, 'SQKB4M2Z-Z7DJVY8G', 'Platinum III', 'ivkeboyara', '2024-08-13 12:33:16', '2024-08-13 12:32:31'),
+(6, 'ZWDRVZRU-XD3UQ8M7', 'Basic I', NULL, NULL, '2024-10-22 21:17:15');
 
 -- --------------------------------------------------------
 
@@ -208,7 +226,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `setting_name`, `setting_value`) VALUES
-(1, 'totalServers', '26');
+(1, 'totalServers', '22');
 
 -- --------------------------------------------------------
 
@@ -296,15 +314,17 @@ CREATE TABLE `users` (
   `expires_at` datetime DEFAULT NULL,
   `lastAttackTime` datetime DEFAULT NULL,
   `totalAttacks` int(11) DEFAULT 0,
-  `joined_at` datetime DEFAULT current_timestamp()
+  `joined_at` datetime DEFAULT current_timestamp(),
+  `isPromoter` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `password`, `balance`, `isAdmin`, `plan`, `expires_at`, `lastAttackTime`, `totalAttacks`, `joined_at`) VALUES
-(1, 'ivkeboyara', '$2b$10$UuXlr0FHGPwIADqEpoS6V.Nkj8cjVW4WUB7U2EqGrzqPY2YNWP3BW', 0.00, 1, NULL, NULL, NULL, 0, '2024-10-19 09:43:19');
+INSERT INTO `users` (`id`, `name`, `password`, `balance`, `isAdmin`, `plan`, `expires_at`, `lastAttackTime`, `totalAttacks`, `joined_at`, `isPromoter`) VALUES
+(1, 'ivkeboyara', '$2b$10$UuXlr0FHGPwIADqEpoS6V.Nkj8cjVW4WUB7U2EqGrzqPY2YNWP3BW', 0.00, 1, 'Basic I', '2024-11-22 21:16:09', NULL, 0, '2024-10-19 09:43:19', 1),
+(2, 'random mmk', '$2b$10$E4T8S5h7yKf0Dj8ZjKbF6OmdyUql3s5/t.YzZ1JjZ4XifZgB4B42y', 0.00, 0, 'basic', '2024-12-31 23:59:59', NULL, 0, '2024-10-22 21:09:04', 0);
 
 --
 -- Indexes for dumped tables
@@ -314,6 +334,12 @@ INSERT INTO `users` (`id`, `name`, `password`, `balance`, `isAdmin`, `plan`, `ex
 -- Indexes for table `apis`
 --
 ALTER TABLE `apis`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `attacks`
+--
+ALTER TABLE `attacks`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -391,6 +417,12 @@ ALTER TABLE `apis`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `attacks`
+--
+ALTER TABLE `attacks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+
+--
 -- AUTO_INCREMENT for table `banned_ips`
 --
 ALTER TABLE `banned_ips`
@@ -412,7 +444,7 @@ ALTER TABLE `blacklist`
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `plans`
@@ -424,19 +456,19 @@ ALTER TABLE `plans`
 -- AUTO_INCREMENT for table `port_blacklist`
 --
 ALTER TABLE `port_blacklist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `redeem_codes`
 --
 ALTER TABLE `redeem_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `slots`
@@ -448,7 +480,7 @@ ALTER TABLE `slots`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
