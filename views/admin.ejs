@@ -21,6 +21,7 @@
             <li class="menu-btn"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></li>
         </ul>
         <ul class="sidebar">
+            <li data-tab-target="#dashboard"><a href="/dashboard"><i class='bx bxs-exit'></i> Dashboard</a></li>
             <li data-tab-target="#news"><a href="#"><i class='bx bx-news'></i> News</a></li>
             <li data-tab-target="#reedem"><a href="#"><i class='bx bx-barcode-reader'></i> Reedem Code</a></li>
             <li data-tab-target="#apis"><a href="#"><i class='bx bx-code-block'></i> APIs</a></li>
@@ -148,7 +149,7 @@
                     <select id="usersBalance" name="userId">
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.id %>"><%= user.username %></option>
+                                <option value="<%= user.id %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
@@ -167,7 +168,7 @@
                     <select id="usersPassword" name="userId">
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.id %>"><%= user.username %></option>
+                                <option value="<%= user.id %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
@@ -186,7 +187,7 @@
                     <select id="usersCooldown" name="username" required>
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.username %>"><%= user.username %></option>
+                                <option value="<%= user.name %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
@@ -207,7 +208,7 @@
                     <select id="removeCooldownUser" name="username" required>
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.username %>"><%= user.username %></option>
+                                <option value="<%= user.name %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
@@ -224,7 +225,7 @@
                     <select id="banUser" name="username" required>
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.username %>"><%= user.username %></option>
+                                <option value="<%= user.name %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
@@ -243,7 +244,7 @@
                     <select id="unbanUser" name="username" required>
                         <% if (bannedUsers && bannedUsers.length > 0) { %>
                             <% bannedUsers.forEach(user => { %>
-                                <option value="<%= user.username %>"><%= user.username %></option>
+                                <option value="<%= user.name %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No banned users available</option>
@@ -260,7 +261,7 @@
                     <select id="banUser" name="username" required>
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.username %>"><%= user.username %></option>
+                                <option value="<%= user.name %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
@@ -296,7 +297,7 @@
                     <select id="usersPlans" name="userId">
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.id %>"><%= user.username %></option>
+                                <option value="<%= user.id %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
@@ -323,7 +324,7 @@
                     <select id="usersRemovePlan" name="userId">
                         <% if (locals.users && locals.users.length > 0) { %>
                             <% locals.users.forEach(user => { %>
-                                <option value="<%= user.id %>"><%= user.username %></option>
+                                <option value="<%= user.id %>"><%= user.name %></option>
                             <% }); %>
                         <% } else { %>
                             <option value="">No users available</option>
