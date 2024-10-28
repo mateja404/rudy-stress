@@ -93,6 +93,13 @@ app.get('/purchase', (req, res) => {
     }
 });
 
+app.get('/settings', (req, res) => {
+    if (req.session.logged) {
+        res.render('settings');
+    } else {
+        res.redirect('/login');
+    }
+});
 app.get('/api/dashboard-data', (req, res) => {
     if (req.session.logged) {
         database.query('SELECT COUNT(*) AS totalUsers FROM users', (error, userResults) => {

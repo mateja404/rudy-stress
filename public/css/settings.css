@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap');
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #0e1323;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #0a0c17;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #0a0c17;
+}
+
+* {
+    font-family: "Afacad Flux", sans-serif;
+}
+
+body {
+    background: #0e1323;
+}
+
+header {
+    display: flex;
+    width: 100vw;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(60deg, #0a0e19, #0a0e19, #090e18, #090e18);
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+header ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header ul li {
+    display: inline;
+    font-size: 1.3rem;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+header ul li a {
+    color: rgba(255,255,255,.5);
+    text-decoration: none;
+    transition: .2s;
+}
+
+header ul li a i {
+    transform: translateY(2px);
+}
+
+header ul li a:hover {
+    color: #fff;
+    transition: .2s;
+}
+
+.active {
+    background-color: #212835;
+    padding: 8px;
+    border-radius: 5px;
+    color: #fff !important;
+}
+
+.menu-btn {
+    display: none;
+}
+
+.sidebar {
+    position: absolute;
+    top: -16px;
+    background-color: #273245;
+    width: 100%;
+    height: 260px;
+    display: none;
+    flex-direction: column;
+    gap: 7px;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.active-sidebar {
+    display: inline-flex;
+    opacity: 1;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.profile-sec {
+    display: flex;
+    position: relative;
+    background-color: #090e18;
+    margin-top: 180px;
+    padding: 20px;
+    width: 550px;
+    height: 300px;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.profile-sec h2 {
+    position: absolute;
+    top: 0;
+}
+
+.profile-sec i {
+    font-size: 1.3rem;
+}
+
+.profile {
+    margin-top: 35px;
+}
+
+.profile p {
+    position: absolute;
+    transform: translateY(-52px);
+    right: 15px;
+    background-color: #253350;
+    color: #357fe5;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+}
+
+.account-sec {
+    display: flex;
+    position: relative;
+    background-color: #090e18;
+    margin-top: 10px;
+    padding: 20px;
+    width: 550px;
+    height: 300px;
+    color: #fff;
+    border-radius: 10px;
+}
+
+.account-sec h2 {
+    position: absolute;
+    top: 0;
+}
+
+.account-sec i {
+    font-size: 1.3rem;
+}
+
+.account {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.account label {
+    position: relative;
+    left: -10px;
+}
+
+.account input {
+    background-color: #0f141e;
+    border: none;
+    outline: none;
+    height: 28px;
+    color: #fff;
+    width: 100%;
+}
+
+@media screen and (max-width: 800px) {
+    .hideOnMobile {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+        z-index: 10;
+        position: absolute;
+        right: 0;
+    }
+
+    .profile-sec {
+        width: calc(100%- 20px);
+    }
+}
