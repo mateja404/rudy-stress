@@ -28,11 +28,19 @@ app.use((req, res, next) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('register');
+    if (req.session.logged) {
+        res.redirect('/dashboard');
+    } else {
+        res.render('register');
+    }
 });
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    if (req.session.logged) {
+        res.redirect('/dashboard');
+    } else {
+        res.render('login');
+    }
 });
 
 app.get('/dashboard', (req, res) => {

@@ -157,7 +157,7 @@ hr {
 
 .plan a {
     position: relative;
-    top: 120px;
+    top: 117px;
     margin-left: auto;
     margin-right: auto;
     background-color: #995d15;
@@ -170,6 +170,23 @@ hr {
     color: #fff;
     text-decoration: none;
     box-shadow: 0 0 5px darkorange, 0 0 10px darkorange;
+}
+
+footer {
+    margin-top: 40px;
+    text-align: center;
+}
+
+footer a {
+    text-align: center;
+    color: darkorange;
+    font-size: 1.2rem;
+    text-decoration: none;
+    text-shadow: 0 0 5px darkorange, 0 0 10px darkorange;
+}
+
+footer span {
+    color: darkorange;
 }
 
 @media screen and (max-width: 576px) {
