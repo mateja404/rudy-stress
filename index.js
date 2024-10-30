@@ -5,8 +5,9 @@ const app = express();
 const database = require('./mysql');
 const axios = require('axios');
 const bcrypt = require('bcrypt');
-const port = 90;
+const port = 80;
 
+const promoterMiddleware = require('./middleware/promoter');
 const adminMiddleware = require('./middleware/admin');
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
@@ -103,11 +104,62 @@ app.get('/purchase', (req, res) => {
 
 app.get('/settings', (req, res) => {
     if (req.session.logged) {
-        res.render('settings');
+      const userId = req.session.userId;
+  
+      database.query('SELECT * FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err) throw err;
+  
+        if (results.length > 0) {
+          const user = results[0];
+          const formattedJoinedAt = new Date(user.joined_at).toLocaleDateString();
+          const formattedExpiresAt = new Date(user.expires_at).toLocaleDateString();
+  
+          res.render('settings', {
+            id: user.id,
+            name: user.name,
+            plan: user.plan,
+            expires: formattedExpiresAt,
+            type: user.isAdmin ? 'Admin' : 'User',
+            balance: user.balance,
+            joined: formattedJoinedAt
+          });
+        } else {
+          res.send('Korisnik nije pronađen');
+        }
+      });
     } else {
-        res.redirect('/login');
+      res.redirect('/login');
     }
+});  
+
+app.post('/settings', (req, res) => {
+  if (req.session.logged) {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.session.userId;
+
+    database.query('SELECT * FROM users WHERE id = ?', [userId], (err, results) => {
+      if (err) throw err;
+
+      const user = results[0];
+      bcrypt.compare(currentPassword, user.password, (err, isMatch) => {
+        if (err) throw err;
+
+        if (isMatch) {
+          const hashedPassword = bcrypt.hashSync(newPassword, 10);
+          database.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId], (err) => {
+            if (err) throw err;
+            res.send('Lozinka uspešno promenjena');
+          });
+        } else {
+          res.send('Trenutna lozinka nije tačna');
+        }
+      });
+    });
+  } else {
+    res.redirect('/login');
+  }
 });
+
 app.get('/api/dashboard-data', (req, res) => {
     if (req.session.logged) {
         database.query('SELECT COUNT(*) AS totalUsers FROM users', (error, userResults) => {
@@ -176,33 +228,38 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
-        const results = await new Promise((resolve, reject) => {
-            database.query("SELECT * FROM `users` WHERE `name` = ?", [username], (error, results) => {
-                if (error) return reject(error);
-                resolve(results);
-            });
+      const results = await new Promise((resolve, reject) => {
+        database.query("SELECT * FROM `users` WHERE `name` = ?", [username], (error, results) => {
+          if (error) return reject(error);
+          resolve(results);
         });
-        if (results.length === 0) {
-            req.session.errorMessage = 'Invalid username or password.';
-            return res.redirect("/login");
-        }
-        const user = results[0];
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            req.session.errorMessage = 'Invalid username or password.';
-            return res.redirect("/login");
-        }
-        req.session.logged = true;
-        req.session.username = username;
-        req.session.isAdmin = user.isAdmin;
-        req.session.isPromoter = user.isPromoter; // Dodaj ovu liniju
-        res.redirect("/dashboard");
-    } catch (error) {
-        console.error("Error:", error);
-        req.session.errorMessage = 'An error occurred. Please try again.';
+      });
+  
+      if (results.length === 0) {
+        req.session.errorMessage = 'Invalid username or password.';
         return res.redirect("/login");
+      }
+  
+      const user = results[0];
+      const match = await bcrypt.compare(password, user.password);
+  
+      if (!match) {
+        req.session.errorMessage = 'Invalid username or password.';
+        return res.redirect("/login");
+      }
+  
+      req.session.logged = true;
+      req.session.userId = user.id;
+      req.session.username = username;
+      req.session.isAdmin = user.isAdmin;
+      req.session.isPromoter = user.isPromoter;
+      res.redirect("/dashboard");
+    } catch (error) {
+      console.error("Error:", error);
+      req.session.errorMessage = 'An error occurred. Please try again.';
+      return res.redirect("/login");
     }
-});
+});  
 
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -217,7 +274,18 @@ app.get('/noaccess', (req, res) => {
     res.render('noaccess');
 });
 
+app.get('/promoter', promoterMiddleware, (req, res) => {
+    if (req.session.logged && req.session.isPromoter) {
+        res.render('promoter', { isPromoter: req.session.isPromoter, username: req.session.username });
+    } else {
+        res.redirect('/noaccess');
+    }
+});
+
 const imgbbApiKey = 'd3aacfaa24bfb9801f8a7caddef0fbc2';
+
+const COOLDOWN_TIME = 60 * 1000; 
+const cooldowns = {};
 
 async function uploadImageToImgBB(imageBuffer, title) {
     const formData = new URLSearchParams();
